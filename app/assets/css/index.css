@@ -19,3 +19,18 @@
 #nav-index{
  z-index: 2;
 }
+.side-nav .side-nav-inner .side-nav-menu li {
+	display: none;
+}
+
+div.main-content-dashboard{
+	display: none;
+}
+
+li.nav-admin {
+	display: none;
+}
+
+li.nav-em {
+	display: none;
+}

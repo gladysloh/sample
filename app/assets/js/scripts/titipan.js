@@ -1,13 +1,15 @@
-function getTitipan(){
-    var db = firebase.firestore();
+var userRole = localStorage.getItem("userRole");
+function getTitipan() {
+    if (userRole == 0) {
 
-    var titipan = db.collection("Titipan"); 
+        var db = firebase.firestore();
 
+        var titipan = db.collection("Titipan");
 
-        titipan.get().then(function(querySnapshot) {
+        titipan.get().then(function (querySnapshot) {
             var sn = 0;
             var titipanArr = [];
-            querySnapshot.forEach(function(doc) {
+            querySnapshot.forEach(function (doc) {
                 sn++;
                 let aktif = doc.data().aktif;
                 let danaTitipan = doc.data().danaTitipan;
@@ -19,37 +21,39 @@ function getTitipan(){
                 let tanggalBerakhir = doc.data().tanggalBerakhir;
                 let tanggalMulai = doc.data().tanggalMulai;
 
-                if(tanggalBerakhir != null){
+                if (tanggalBerakhir != null) {
                     tanggalBerakhir = tanggalBerakhir.toDate();
-                }else{
+                } else {
                     tanggalBerakhir = ' - '
                 }
-                if (tanggalMulai != null){
+                if (tanggalMulai != null) {
                     tanggalMulai = tanggalMulai.toDate();
-                }else{
+                } else {
                     tanggalMulai = " - "
                 }
-                
 
-                titipanArr.push([sn,aktif,danaTitipan,keuntungan,komisiTrader,tanggalBerakhir, tanggalMulai]);
-                
+                titipanArr.push([sn, aktif, danaTitipan, keuntungan, komisiTrader, tanggalBerakhir, tanggalMulai]);
+
                 return titipanArr;
             });
-            
+
             $('#data-table').DataTable({
                 data: titipanArr,
                 columns: [
                     { title: "#" },
                     { title: "Aktif" },
                     { title: "Dana Titipan" },
-                    { title: "Keuntungan"},
-                    { title: "Komisi Trader"},
-                    { title: "Tanggal Berakhir"},
-                    { title: "TanggalMulai"},
+                    { title: "Keuntungan" },
+                    { title: "Komisi Trader" },
+                    { title: "Tanggal Berakhir" },
+                    { title: "TanggalMulai" },
                 ]
             });
 
-        }).catch(function(err){
+        }).catch(function (err) {
             console.log(err);
         });
+    } else {
+        $(".main-content").hide();
+    }
 }

@@ -1,12 +1,15 @@
-function getDeposits(){
-    var db = firebase.firestore();
+var userRole = localStorage.getItem("userRole");
 
-    var deposit = db.collection("TambahDana"); 
+function getDeposits() {
+    if (userRole == 0) {
+        var db = firebase.firestore();
 
-        deposit.get().then(function(querySnapshot) {
+        var deposit = db.collection("TambahDana");
+
+        deposit.get().then(function (querySnapshot) {
             var sn = 0;
             var depositArr = [];
-            querySnapshot.forEach(function(doc) {
+            querySnapshot.forEach(function (doc) {
                 sn++;
                 let bank = doc.data().bank;
                 let jumlah = doc.data().jumlah;
@@ -15,35 +18,38 @@ function getDeposits(){
                 let waktuMulai = doc.data().waktuMulai;
                 let waktuSelesai = doc.data().waktuSelesai;
 
-                if(waktuMulai != null){
+                if (waktuMulai != null) {
                     waktuMulai = waktuMulai.toDate();
-                }else{
+                } else {
                     waktuMulai = ' - '
                 }
-                if (waktuSelesai != null){
+                if (waktuSelesai != null) {
                     waktuSelesai = waktuSelesai.toDate();
-                }else{
+                } else {
                     waktuSelesai = " - "
                 }
-                
-                depositArr.push([sn,bank,jumlah,status,waktuMulai,waktuSelesai]);
-                
+
+                depositArr.push([sn, bank, jumlah, status, waktuMulai, waktuSelesai]);
+
                 return depositArr;
             });
-            
+
             $('#data-table').DataTable({
                 data: depositArr,
                 columns: [
                     { title: "#" },
                     { title: "Bank" },
                     { title: "Jumlah" },
-                    { title: "Status"},
-                    { title: "Waktu Mulai"},
-                    { title: "Waktu Selesai"}
+                    { title: "Status" },
+                    { title: "Waktu Mulai" },
+                    { title: "Waktu Selesai" }
                 ]
             });
 
-        }).catch(function(err){
+        }).catch(function (err) {
             console.log(err);
         });
+    }else{
+        $(".main-content").hide();
+    }
 }

@@ -1,70 +1,76 @@
+var userRole = localStorage.getItem("userRole");
+
 function getAllTraders() {
-    var admin = firebase.auth().currentUser;
-    var db = firebase.firestore();
+    if (userRole == 0) {
+        var db = firebase.firestore();
 
-    var trader = db.collection("Trader"); //All User 
+        var trader = db.collection("Trader"); //All User 
 
-    let userid;
+        let userid;
 
-    trader.get().then(function (querySnapshot) {
-        var sn = 0;
-        var traderDetails = [];
-        querySnapshot.forEach(function (doc) {
-            sn++;
-            userid = doc.id;
-            let name = doc.data().namaTrader;
-            let danaTitipan = doc.data().danaTitipan;
-            danaTitipan = 'IDR ' + danaTitipan.toFixed(0).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1\.");
-            let avatar = doc.data().urlAvatar;
-            let user = "<div class='d-flex align-items-center'><img src='"
-                + avatar + "' class='img-fluid rounded' style='max-width: 60px'><h6 class='m-b-0 m-l-10 trader-name'>"
-                + name + "</h6></div>";
+        trader.get().then(function (querySnapshot) {
+            var sn = 0;
+            var traderDetails = [];
+            querySnapshot.forEach(function (doc) {
+                sn++;
+                userid = doc.id;
+                let name = doc.data().namaTrader;
+                let danaTitipan = doc.data().danaTitipan;
+                danaTitipan = 'IDR ' + danaTitipan.toFixed(0).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1\.");
+                let avatar = doc.data().urlAvatar;
+                let user = "<div class='d-flex align-items-center'><img src='"
+                    + avatar + "' class='img-fluid rounded' style='max-width: 60px'><h6 class='m-b-0 m-l-10 trader-name'>"
+                    + name + "</h6></div>";
 
-            traderDetails.push([sn, user, danaTitipan, name]);
+                traderDetails.push([sn, user, danaTitipan, name]);
 
-            return traderDetails;
-        });
-
-        $('#data-table').DataTable({
-            data: traderDetails,
-            columns: [
-                { title: "S/N" },
-                { title: "User" },
-                { title: "DanaTitipan" },
-                {
-                    mRender: function (data, type, row) {
-                        return '<button class="btn btn-icon btn-hover btn-sm btn-rounded pull-right" data-id="'
-                            + row[0] + '" id="edit-trader"> <i class="anticon anticon-edit"> </i> </button>'
-                            + '<button class="btn btn-icon btn-hover btn-sm btn-rounded pull-right" data-id="'
-                            + row[0] + '" id="trader-info" data-toggle="modal" data-target="#traderModal"> <i class="anticon anticon-info-circle"></i></button>'
-                    }
-                },
-            ]
-        });
-
-        var table = $('#data-table').DataTable();
-
-        $('#data-table tbody').on('click', '#edit-trader', function () {
-            var data = table.row($(this).parents('tr')).data();
-            var queryString = "?namaTrader=" + data[3];
-            window.location.href = "edit-trader.html" + queryString
-        });
-
-        $('#data-table tbody').on('click', '#trader-info', function () {
-            var data = table.row($(this).parents('tr')).data();
-            var tradername = data[data.length - 1];
-            Promise.all(getTrader(tradername)).then(function (value) {
-                var arrays = value
-                var merged = [].concat.apply([], arrays);
-                $("#modalTitle").text(merged[0]);
-                $("#totalInvest").text(merged[1]);
-                $("#peopleInvested").text(merged[2]);
+                return traderDetails;
             });
-        });
 
-    }).catch(function (err) {
-        console.log(err);
-    });
+            $('#data-table').DataTable({
+                data: traderDetails,
+                columns: [
+                    { title: "S/N" },
+                    { title: "User" },
+                    { title: "DanaTitipan" },
+                    {
+                        mRender: function (data, type, row) {
+                            return '<button class="btn btn-icon btn-hover btn-sm btn-rounded pull-right" data-id="'
+                                + row[0] + '" id="edit-trader"> <i class="anticon anticon-edit"> </i> </button>'
+                                + '<button class="btn btn-icon btn-hover btn-sm btn-rounded pull-right" data-id="'
+                                + row[0] + '" id="trader-info" data-toggle="modal" data-target="#traderModal"> <i class="anticon anticon-info-circle"></i></button>'
+                        }
+                    },
+                ]
+            });
+
+            var table = $('#data-table').DataTable();
+
+            $('#data-table tbody').on('click', '#edit-trader', function () {
+                var data = table.row($(this).parents('tr')).data();
+                var queryString = "?namaTrader=" + data[3];
+                window.location.href = "edit-trader.html" + queryString
+            });
+
+            $('#data-table tbody').on('click', '#trader-info', function () {
+                var data = table.row($(this).parents('tr')).data();
+                var tradername = data[data.length - 1];
+                Promise.all(getTrader(tradername)).then(function (value) {
+                    var arrays = value
+                    var merged = [].concat.apply([], arrays);
+                    $("#modalTitle").text(merged[0]);
+                    $("#totalInvest").text(merged[1]);
+                    $("#peopleInvested").text(merged[2]);
+                });
+            });
+
+        }).catch(function (err) {
+            console.log(err);
+        });
+    }else{
+        $(".main-content").hide();
+    }
+
 }
 
 function getTrader(trader) {
@@ -90,7 +96,7 @@ function getTrader(trader) {
         .catch(function (error) {
             console.log("Error getting documents: ", error);
         });
-        
+
     return [trader].concat(totalInvest);
 }
 
@@ -253,43 +259,3 @@ var getUrlParameter = function getUrlParameter(sParam) {
     }
 };
 
-$("#formValidation").validate({
-    ignore: ':hidden:not(:checkbox)',
-    errorElement: 'label',
-    errorClass: 'is-invalid',
-    validClass: 'is-valid',
-    rules: {
-        traderName: {
-            required: true
-        },
-        traderUrl: {
-            required: true,
-            url: true
-        },
-        danaTitipan: {
-            required: true,
-            digits: true
-        },
-        jumlahPenitip: {
-            required: true,
-            digits: true
-        },
-        deskripsi: {
-            required: true
-        },
-        rating: {
-            required: true,
-            digits: true,
-            max: 5
-        },
-        resiko: {
-            required: true,
-            digits: true,
-            max: 5
-        },
-        grafik: {
-            //required: true
-        }
-
-    }
-});

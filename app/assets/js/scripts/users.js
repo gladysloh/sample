@@ -1,5 +1,6 @@
+var userRole = localStorage.getItem("userRole");
 function getAllUsers(){
-
+if(userRole == 0){
     var pengguna = db.collection("Pengguna"); //All User 
    
     let userid;
@@ -72,6 +73,9 @@ function getAllUsers(){
         }).catch(function(err){
             console.log(err);
         });
+    }else{
+        $(".main-content").hide();
+    }
 
 }
 
