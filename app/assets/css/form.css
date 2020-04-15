@@ -1,0 +1,9 @@
+#email{
+    border-color: none;
+}
+#password{
+    border-color: none;
+}
+#error-msg{
+    color: red; 
+}
