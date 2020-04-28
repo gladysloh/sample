@@ -11,7 +11,7 @@ function getDeposits() {
             var depositArr = [];
             querySnapshot.forEach(function (doc) {
                 sn++;
-                let bank = doc.data().bank;
+                let bank = doc.data().data.channel;
                 let jumlah = doc.data().jumlah;
                 jumlah = 'IDR ' + jumlah.toFixed(0).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1\.");
                 let status = doc.data().status;
