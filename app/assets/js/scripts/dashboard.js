@@ -16,7 +16,7 @@ $(document).ready(function () {
 
         tambahDana.get().then(function (querySnapshot) {
             var totalJumlah = 0;
-            
+
             querySnapshot.forEach(function (doc) {
                 var waktuMulai = doc.data().waktuMulai;
                 waktuMulai = waktuMulai.toDate();
@@ -24,7 +24,7 @@ $(document).ready(function () {
                 var day = waktuMulai.getUTCDate();
                 var year = waktuMulai.getUTCFullYear();
                 var newDate = day + "/" + month + "/" + year;
-                
+
                 if (doc.data().status == 'SELESAI' && todayDate == newDate) {
                     var jumlah = doc.data().jumlah;
                     totalJumlah += jumlah;
@@ -95,3 +95,33 @@ $(document).ready(function () {
         $(".main-content").hide();
     }
 });
+
+function downloadReport() {
+    var jumlah = $("#totalJumlah").text();
+    var withdraw = $("#totalWithdraw").text();
+    var titipan = $("#activeTitipan").text();
+    
+    console.log(jumlah, withdraw,titipan);
+    var today = new Date();
+    var tMonth = today.getUTCMonth() + 1;
+    var tDay = today.getUTCDate();
+    var tYear = today.getUTCFullYear();
+    var todayDate = tDay + "-" + tMonth + "-" + tYear;
+
+    var data = [];
+    data.push([todayDate,jumlah,withdraw,titipan]);
+
+    var csv = 'Date, Total Jumlah, Total Tarik Dana, Total Titipan\n';
+    data.forEach(function (row) {
+        csv += row.join(',');
+        csv += "\n";
+    });
+
+    console.log(csv);
+    var hiddenElement = document.createElement('a');
+    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+    hiddenElement.target = '_blank';
+    hiddenElement.download = todayDate + '_report.csv';
+    hiddenElement.click();
+
+}
