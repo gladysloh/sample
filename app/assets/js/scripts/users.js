@@ -62,8 +62,7 @@ if(userRole == 0){
                         $("#modalTitle").text(value[0]);
                         $("#totalDeposit").text(value[1]);
                         $("#totalInvest").text(value[2]);
-                        $("#totalConfirm").text(value[3]);
-                        $("#pencairan").text(value[4]);
+                        $("#pencairan").text(value[3]);
 
                     });
                     
@@ -99,9 +98,10 @@ function getTotalOfUser(userid){
     .then(function(querySnapshot) {
         var tempDeposit = 0;
         querySnapshot.forEach(function(doc) {
-            var deposit = doc.data().jumlah;
-            
-            tempDeposit +=  deposit;
+            if(doc.data().status == "SELESAI"){
+                var deposit = doc.data().jumlah;
+                tempDeposit +=  deposit;
+            }
         });
         tempDeposit = "IDR " + tempDeposit.toFixed(0).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1\.");
         return tempDeposit;
@@ -128,23 +128,6 @@ function getTotalOfUser(userid){
         console.log("Error getting documents: ", error);
     });
 
-    var totalConfirm = db.collection("KonfirmasiTambahDana")
-    .where('dokumenPengguna', '==', userRef)
-    .where('status', '==', "SELESAI")
-    .get()
-    .then(function(querySnapshot) {
-        var tempConfirm = 0;
-        querySnapshot.forEach(function(doc) {
-            var confirm= doc.data().jumlah;
-            tempConfirm +=  confirm;
-        });
-        tempConfirm = "IDR " + tempConfirm.toFixed(0).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1\.");
-        return tempConfirm;
-    })
-    .catch(function(error) {
-        console.log("Error getting documents: ", error);
-    });
-
     var pencairan = db.collection("TarikDana")
     .where('dokumenPengguna', '==', userRef)
     .where('selesai', '==', true)
@@ -162,5 +145,5 @@ function getTotalOfUser(userid){
         console.log("Error getting documents: ", error);
     });
     
-    return [username, totalDeposit, totalInvest, totalConfirm, pencairan];
+    return [username, totalDeposit, totalInvest, pencairan];
 }
