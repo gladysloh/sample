@@ -10,32 +10,25 @@ $(document).ready(function () {
     var tYear = today.getUTCFullYear();
     var todayDate = tDay + "/" + tMonth + "/" + tYear;
 
-    var confirmDeposit = db.collection("KonfirmasiTambahDana");
+    var tambahDana = db.collection("TambahDana");
     var withdraw = db.collection("TarikDana");
     var titipan = db.collection("Titipan");
 
-    confirmDeposit.get().then(function (querySnapshot) {
-        var totalDeposit = 0;
+    tambahDana.get().then(function (querySnapshot) {
+        var totalJumlah = 0;
         querySnapshot.forEach(function (doc) {
-
-            var activeDate = doc.data().tanggalSelesai;
-            activeDate = activeDate.toDate();
-            var month = activeDate.getUTCMonth() + 1; //months from 1-12
-            var day = activeDate.getUTCDate();
-            var year = activeDate.getUTCFullYear();
-            var newActiveDate = day + "/" + month + "/" + year;
-            if (doc.data().status == 'SELESAI' && todayDate == newActiveDate) {
+            if (doc.data().status == 'SELESAI') {
                 var jumlah = doc.data().jumlah;
-                totalDeposit += jumlah;
-                return totalDeposit;
+                totalJumlah += jumlah;
+                return totalJumlah;
             } else {
-                return totalDeposit;
+                return totalJumlah;
             }
 
         });
 
-        totalDeposit = "IDR " + totalDeposit.toFixed(0).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1\.");
-        $("#totalConDep").html(totalDeposit)
+        totalJumlah = "IDR " + totalJumlah.toFixed(0).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1\.");
+        $("#totalJumlah").html(totalJumlah)
     });
 
     withdraw.get().then(function (querySnapshot) {
