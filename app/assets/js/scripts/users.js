@@ -129,7 +129,6 @@ function getTotalOfUser(userid) {
 
     var pencairan = db.collection("TarikDana")
         .where('dokumenPengguna', '==', userRef)
-        .where('selesai', '==', true)
         .get()
         .then(function (querySnapshot) {
             var tempPen = 0;
