@@ -100,8 +100,6 @@ function downloadReport() {
     var jumlah = $("#totalJumlah").text();
     var withdraw = $("#totalWithdraw").text();
     var titipan = $("#activeTitipan").text();
-    
-    console.log(jumlah, withdraw,titipan);
     var today = new Date();
     var tMonth = today.getUTCMonth() + 1;
     var tDay = today.getUTCDate();
@@ -116,8 +114,6 @@ function downloadReport() {
         csv += row.join(',');
         csv += "\n";
     });
-
-    console.log(csv);
     var hiddenElement = document.createElement('a');
     hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
     hiddenElement.target = '_blank';
