@@ -11,7 +11,7 @@ function getDeposits() {
             var depositArr = [];
             querySnapshot.forEach(function (doc) {
                 sn++;
-                let bank = doc.data().data.channel;
+               
                 let jumlah = doc.data().jumlah;
                 jumlah = 'IDR ' + jumlah.toFixed(0).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1\.");
                 let status = doc.data().status;
@@ -29,7 +29,7 @@ function getDeposits() {
                     waktuSelesai = " - "
                 }
 
-                depositArr.push([sn, bank, jumlah, status, waktuMulai, waktuSelesai]);
+                depositArr.push([sn, jumlah, status, waktuMulai, waktuSelesai]);
 
                 return depositArr;
             });
@@ -38,7 +38,6 @@ function getDeposits() {
                 data: depositArr,
                 columns: [
                     { title: "#" },
-                    { title: "Bank" },
                     { title: "Jumlah" },
                     { title: "Status" },
                     { title: "Waktu Mulai" },

@@ -14,9 +14,8 @@ $(document).ready(function () {
             let status = doc.data().status;
             let namaRekening = doc.data().namaRekening;
             let nomorRekening = doc.data().nomorRekening;
-            let selesai = doc.data().selesai;
 
-            withdrawArr.push([sn, bank, namaRekening, nomorRekening, jumlah, status, selesai, doc.id]);
+            withdrawArr.push([sn, bank, namaRekening, nomorRekening, jumlah, status, doc.id]);
 
             return withdrawArr;
         });
@@ -33,11 +32,10 @@ $(document).ready(function () {
                 { title: "Nama Rekening" },
                 { title: "Nomor Rekening" },
                 { title: "Jumlah" },
-                { title: "Status" },
-                { title: "Selesai" }
+                { title: "Status" }
             ],
             initComplete: function () {
-                this.api().columns([5, 6]).every(function () {
+                this.api().columns([5]).every(function () {
                     var column = this;
                     var select = $('<select class="custom-select" style="min-width: 180px;"><option value=""> </option></select>')
                         .appendTo($(column.footer()).empty())
