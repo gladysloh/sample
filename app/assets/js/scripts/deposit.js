@@ -24,10 +24,12 @@ function getDeposits() {
                     waktuMulai = waktuMulai.toDate();
                 } else {
                     waktuMulai = ' - '
+                } 
+                
+                if(status=="MENUNGGU"){
+                    depositArr.push([sn, jumlah, status, waktuMulai, bank, namaPemilik, nomorRekening, doc.id]);
                 }
-
-                depositArr.push([sn, jumlah, status, waktuMulai, bank, namaPemilik, nomorRekening, doc.id]);
-
+                
                 return depositArr;
             });
 
