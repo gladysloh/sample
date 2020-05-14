@@ -29,6 +29,7 @@
         "bootstrap": "^4.3.1",
         "bootstrap-datepicker": "^1.9.0",
         "chart.js": "^2.8.0",
+        "cors-anywhere": "file:cors-anywhere",
         "datatables.net-dt": "^1.10.19",
         "del": "^5.1.0",
         "firebase": "^7.13.1",
