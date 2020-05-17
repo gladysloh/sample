@@ -62,15 +62,11 @@ function getDeposits() {
                 var docId = data[7];
 
                 if (status == 'MENUNGGU') {
-                    
                     deposit.doc(docId).update({
                         status: 'SELESAI'
                     }).then(function () {
                         alert("Successfully Updated Dokumen Status to 'SELESAI'")
                         setTambahDanaLog(docId);
-                        updatePengguna(docId);
-                        location.reload(); //reload after save
-
                     }).catch(function (error) {
                         console.error("Error updating document: ", error);
                     });
@@ -123,6 +119,7 @@ function setTambahDanaLog(doc) {
             tanggal: firebase.firestore.Timestamp.fromDate(new Date()),
             dokumen: dokumen
         });
+        updatePengguna(doc);
     }
 }
 
@@ -139,16 +136,24 @@ function updatePengguna(docId){
                 var updateVal = jumlah + saldoUtama;
                 console.log("Saldo Utama: " + saldoUtama + '\nJumlah: ' + jumlah 
                 + "\nUpdate Saldo Utama: " + jumlah + " + " + saldoUtama + " = " + updateVal);
-                penggunaRef.update({ saldoUtama: updateVal });
+                
+                penggunaRef.update({ 
+                    saldoUtama: updateVal 
+                })
+                .then(function() {
+                    console.log("Saldo Utama updated");
+                    location.reload(); //reload after saved
+                  });
             })
             .catch(err => {
                 console.log('Error getting document', err);
-                res.status(200).end('GAGAL');
+                alert("ERROR! Try again ")
             });
 
         } else {
             // doc.data() will be undefined in this case
             console.log("No such document!");
+            alert("No such user.");
         }
     }).catch(function(error) {
         console.log("Error getting document:", error);
