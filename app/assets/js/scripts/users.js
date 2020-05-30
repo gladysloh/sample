@@ -13,10 +13,27 @@ function getAllUsers() {
                 // var totalDeposit = getTotalDeposit(userid);
                 // console.log(totalDeposit);
                 let name = doc.data().namaLengkap;
+                if (name == null) {
+                    name = ' - '
+                 }
+
                 let email = doc.data().email;
+                if (email == null) {
+                    email = ' - '
+                 }
+
                 let tele = doc.data().nomorTelepon;
+                if (tele == null) {
+                   tele = ' - '
+                }
+
                 let bal = doc.data().saldoUtama;
-                bal = 'IDR ' + bal.toFixed(0).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1\.");
+                if (bal == null) {
+                    bal = ' - ';
+                }else{
+                    bal = 'IDR ' + bal.toFixed(0).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1\.");
+                }
+                
                 let avatar = doc.data().urlAvatar;
                 user = "<div class='d-flex align-items-center'><img src='" + avatar + "' class='img-fluid rounded' style='max-width: 60px'><h6 class='m-b-0 m-l-10' id='user-name'>" + name + "</h6><input type='hidden' id='userId' name='userId' value='" + userid + "'></div>";
 
