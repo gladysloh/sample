@@ -34,7 +34,7 @@
         "del": "^5.1.0",
         "firebase": "^7.13.1",
         "jquery": "^3.4.1",
-        "jquery-validation": "^1.19.1",
+        "jquery-validation": "^1.19.3",
         "nouislider": "^14.0.2",
         "perfect-scrollbar": "^1.4.0",
         "popper.js": "^1.15.0",
